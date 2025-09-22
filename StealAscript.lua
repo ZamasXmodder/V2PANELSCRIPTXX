@@ -352,32 +352,36 @@ spawn(function()
     end
 end)
 
--- Botón de cerrar (X) con efectos mejorados
-local closeButton = Instance.new("TextButton")
-closeButton.Name = "CloseButton"
-closeButton.Parent = mainPanel
-closeButton.Size = UDim2.new(0, 35, 0, 35)
-closeButton.Position = UDim2.new(1, -45, 0, 10)
-closeButton.BackgroundColor3 = Color3.fromRGB(60, 20, 20)
-closeButton.BackgroundTransparency = 0.2
-closeButton.BorderSizePixel = 0
-closeButton.Text = "X"
-closeButton.TextColor3 = Color3.fromRGB(255, 100, 100)
-closeButton.TextScaled = true
-closeButton.Font = Enum.Font.GothamBold
-closeButton.ZIndex = 11
+-- Efectos hover mejorados para los botones con animaciones
+local function createAdvancedHoverEffect(button, originalColor, hoverColor, stroke)
+    local tweenInfo = TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.Out)
+    
+    button.MouseEnter:Connect(function()
+        local colorTween = TweenService:Create(button, tweenInfo, {BackgroundColor3 = hoverColor, BackgroundTransparency = 0.1})
+        local scaleTween = TweenService:Create(button, tweenInfo, {Size = button.Size + UDim2.new(0, 5, 0, 2)})
+        local strokeTween = TweenService:Create(stroke, tweenInfo, {Thickness = 4})
+        
+        colorTween:Play()
+        scaleTween:Play()
+        strokeTween:Play()
+    end)
+    
+    button.MouseLeave:Connect(function()
+        local originalSize = button.Name == "GetKeyButton" and UDim2.new(0.45, -10, 0, 50) or 
+                            UDim2.new(0.45, -10, 0, 50)
+        
+        local colorTween = TweenService:Create(button, tweenInfo, {BackgroundColor3 = originalColor, BackgroundTransparency = 0.3})
+        local scaleTween = TweenService:Create(button, tweenInfo, {Size = originalSize})
+        local strokeTween = TweenService:Create(stroke, tweenInfo, {Thickness = 3})
+        
+        colorTween:Play()
+        scaleTween:Play()
+        strokeTween:Play()
+    end)
+end
 
-local closeCorner = Instance.new("UICorner")
-closeCorner.Parent = closeButton
-closeCorner.CornerRadius = UDim.new(0, 17)
-
-local closeStroke = Instance.new("UIStroke")
-closeStroke.Parent = closeButton
-closeStroke.Color = Color3.fromRGB(255, 20, 60)
-closeStroke.Thickness = 3
-closeStroke.Transparency = 0.2
-
--- Animación BRUTAL en el centro del panel
+createAdvancedHoverEffect(getKeyButton, Color3.fromRGB(40, 40, 40), Color3.fromRGB(0, 80, 40), getKeyStroke)
+createAdvancedHoverEffect(submitButton, Color3.fromRGB(40, 40, 40), Color3.fromRGB(80, 40, 0), submitStroke)
 local brutalAnimation = Instance.new("Frame")
 brutalAnimation.Name = "BrutalAnimation"
 brutalAnimation.Parent = mainPanel
@@ -1006,12 +1010,11 @@ local function createAdvancedHoverEffect(button, originalColor, hoverColor, stro
     
     button.MouseLeave:Connect(function()
         local originalSize = button.Name == "GetKeyButton" and UDim2.new(0.45, -10, 0, 50) or 
-                            button.Name == "SubmitButton" and UDim2.new(0.45, -10, 0, 50) or
-                            UDim2.new(0, 35, 0, 35)
+                            UDim2.new(0.45, -10, 0, 50)
         
         local colorTween = TweenService:Create(button, tweenInfo, {BackgroundColor3 = originalColor, BackgroundTransparency = 0.3})
         local scaleTween = TweenService:Create(button, tweenInfo, {Size = originalSize})
-        local strokeTween = TweenService:Create(stroke, tweenInfo, {Thickness = button.Name == "CloseButton" and 2 or 3})
+        local strokeTween = TweenService:Create(stroke, tweenInfo, {Thickness = 3})
         
         colorTween:Play()
         scaleTween:Play()
@@ -1021,6 +1024,5 @@ end
 
 createAdvancedHoverEffect(getKeyButton, Color3.fromRGB(40, 40, 40), Color3.fromRGB(0, 80, 40), getKeyStroke)
 createAdvancedHoverEffect(submitButton, Color3.fromRGB(40, 40, 40), Color3.fromRGB(80, 40, 0), submitStroke)
-createAdvancedHoverEffect(closeButton, Color3.fromRGB(60, 20, 20), Color3.fromRGB(120, 30, 30), closeStroke)
 
 print("Hacker Panel GUI loaded successfully!")
