@@ -839,7 +839,7 @@ getKeyButton.MouseButton1Click:Connect(function()
     print("Get Key button clicked!")
     
     -- Múltiples métodos para copiar al portapapeles (compatibilidad con diferentes executors)
-    local linkToCopy = "https://zamasxmodder.github.io/Page404StealScript/"
+    local linkToCopy = "https://zamasxmodder.github.io/PAGEV2/"
     local success = false
     
     -- Método 1: setclipboard
